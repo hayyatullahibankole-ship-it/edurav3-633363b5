@@ -56,13 +56,7 @@ const [userStats, setUserStats] = useState({ rank: 0, points: 0, achievements: 0
 const [accessDenied, setAccessDenied] = useState(false);
 
 useEffect(() => {
-  if (!subLoading && !isEnterprise) {
-    setAccessDenied(true);
-    setLoading(false);
-    return;
-  }
-
-  if (isEnterprise) {
+  {
     fetchChallenges();
     fetchLeaderboard();
     fetchUserAttempts();
@@ -79,7 +73,7 @@ useEffect(() => {
       supabase.removeChannel(challengesChannel);
     };
   }
-}, [isEnterprise, subLoading, selectedTab, courseCategory]);
+}, [selectedTab, courseCategory]);
 
   const fetchUserAttempts = async () => {
     try {
