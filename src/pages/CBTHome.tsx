@@ -32,7 +32,7 @@ import ExamBadge from "@/components/edura/ExamBadge";
 
 
 const PRACTICE_TOOLS = [
-  { to: "/study-hub", icon: Target, title: "Study hub" },
+  { to: "/study-hub", icon: Target, title: "Classroom" },
   { to: "/resources", icon: FileText, title: "Past questions" },
   { to: "/ebooks", icon: BookOpen, title: "Ebooks" },
   { to: "/ai-tutor", icon: Bot, title: "Ask a tutor" },

@@ -42,10 +42,10 @@ const tourSteps: TourStep[] = [
     action: { label: "Start Practice", href: "/practice" }
   },
   {
-    title: "Study Hub 📚",
+    title: "Classroom 📚",
     description: "Access comprehensive lessons, video tutorials, and study materials for all subjects. Learn at your own pace with expert-curated content.",
     icon: <BookOpen className="h-12 w-12 text-info" />,
-    action: { label: "Explore Study Hub", href: "/study-hub" }
+    action: { label: "Open Classroom", href: "/study-hub" }
   },
   {
     title: "Ask Tutors 💬",

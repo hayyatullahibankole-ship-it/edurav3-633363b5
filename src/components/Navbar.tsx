@@ -62,7 +62,7 @@ const Navbar = () => {
             {user && (
               <>
                 <Link to="/study-hub" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Study Hub
+                  Classroom
                 </Link>
                 <Link to="/forum" className="text-muted-foreground hover:text-foreground transition-colors">
                   Forum

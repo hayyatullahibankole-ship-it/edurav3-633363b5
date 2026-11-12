@@ -80,7 +80,7 @@ const NAV: NavSection[] = [
       { key: 'questions', label: 'Question Bank', icon: FileText },
       { key: 'subjects', label: 'Subjects', icon: BookOpen },
       { key: 'resources', label: 'Resources', icon: Upload },
-      { key: 'study-hub', label: 'Study Hub', icon: GraduationCap },
+      { key: 'study-hub', label: 'Classroom', icon: GraduationCap },
       { key: 'forum', label: 'Forum', icon: MessageCircle },
       { key: 'challenges', label: 'Challenges', icon: Sword },
     ],

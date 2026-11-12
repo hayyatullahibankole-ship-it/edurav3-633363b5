@@ -17,7 +17,7 @@ const Footer = () => {
       title: 'Practice',
       links: [
         { label: 'Demo test', href: '/demo' },
-        { label: 'Study hub', href: '/study-hub' },
+        { label: 'Classroom', href: '/study-hub' },
         { label: 'Resources', href: '/resources' },
         { label: 'Challenge arena', href: '/challenge-arena' },
         { label: 'Get the app', href: '/install-app' },

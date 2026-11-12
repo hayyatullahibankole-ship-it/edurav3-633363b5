@@ -22,7 +22,7 @@ const SIDES: {
     icon: GraduationCap,
     points: [
       "JAMB, WAEC, NECO & Post-UTME practice",
-      "Study hub, lessons and past questions",
+      "Classroom: video lessons, notes and past questions",
       "Performance reports and leaderboards",
     ],
   },

@@ -143,7 +143,7 @@ if (accessDenied) {
       <div className="container mx-auto px-4 py-16 text-center">
         <div className="mx-auto max-w-md">
           <Book className="h-12 w-12 mx-auto text-primary mb-4" />
-          <h1 className="text-2xl font-bold mb-2">Study Hub is a Premium feature</h1>
+          <h1 className="text-2xl font-bold mb-2">Classroom is a Premium feature</h1>
           <p className="text-muted-foreground mb-6">Upgrade to access subjects, topics, and guided lessons.</p>
           <div className="flex gap-3 justify-center">
             <Button onClick={() => navigate('/payment')}>Go Premium</Button>
@@ -173,7 +173,7 @@ if (isMobile) {
           
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
             <Book className="h-8 w-8 text-primary" />
-            Study Hub
+            Classroom
           </h1>
           <p className="text-muted-foreground text-sm">
             {selectedSubject ? 'Select a topic to study' : 'Choose a subject to get started'}

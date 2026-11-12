@@ -382,7 +382,7 @@ export default function StudyHubManager() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Study Hub Management</h2>
+          <h2 className="text-2xl font-bold">Classroom Management</h2>
           <p className="text-muted-foreground">Manage topics, lessons, and resources</p>
         </div>
       </div>

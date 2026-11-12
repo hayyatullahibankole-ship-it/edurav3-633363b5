@@ -112,7 +112,7 @@ export default function StudyTopic() {
           onClick={() => navigate('/study-hub')}
           className="mb-4 text-xs sm:text-sm"
         >
-          ← Back to Study Hub
+          ← Back to Classroom
         </Button>
 
         <div className="mb-6 sm:mb-8">

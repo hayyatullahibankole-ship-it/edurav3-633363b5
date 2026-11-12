@@ -12,7 +12,7 @@ export default function ComingSoon() {
       </div>
       <h1 className="text-2xl font-bold text-foreground mb-2">Coming Soon</h1>
       <p className="text-muted-foreground max-w-xs mb-8">
-        The Study Hub is getting a major upgrade. Check back shortly for an even better learning experience.
+        The Classroom is getting a major upgrade. Check back shortly for an even better learning experience.
       </p>
       <Button onClick={() => navigate(-1)} variant="outline" className="gap-2 rounded-full">
         <ArrowLeft className="w-4 h-4" />
