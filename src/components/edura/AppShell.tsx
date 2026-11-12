@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutGrid,
   BookOpen,
+  Library,
   FolderKanban,
   Compass,
   Wallet as WalletIcon,
