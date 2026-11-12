@@ -26,3 +26,17 @@ describe("word buster", () => {
     expect(wordScore(0, 0)).toBe(100); expect(wordScore(1, 2)).toBe(55); expect(wordScore(4, 5)).toBe(10);
   });
 });
+import { levelFromCount, matchLevelConfig, wordsByDifficulty, WORD_TRIES } from "@/lib/arcade";
+describe("levels", () => {
+  it("level rises every 5 correct", () => { expect(levelFromCount(4)).toBe(1); expect(levelFromCount(5)).toBe(2); });
+  it("formula match gets bigger and tighter", () => {
+    expect(matchLevelConfig(1)).toEqual({ pairs: 4, seconds: 60 });
+    expect(matchLevelConfig(3)).toEqual({ pairs: 6, seconds: 80 });
+    expect(matchLevelConfig(20).pairs).toBe(10);
+  });
+  it("word buster gives 3 tries and harder (longer) words later", () => {
+    expect(WORD_TRIES).toBe(3);
+    const w = wordsByDifficulty([{ word: "PHOTOSYNTHESIS" }, { word: "ENZYME" }]);
+    expect(w[0].word).toBe("ENZYME");
+  });
+});

@@ -13,7 +13,7 @@ const GAMES = [
   { to: "/games/blitz", key: "blitz", icon: Zap, art: blitzArt, title: "60-Second Blitz", tag: "Speed run", body: "Beat the clock. Streaks multiply your score up to 4x.", unit: "pts" },
   { to: "/games/survival", key: "survival", icon: Heart, art: survivalArt, title: "Survival", tag: "Sudden death", body: "Three hearts. Points climb every 5 right answers.", unit: "pts" },
   { to: "/games/match", key: "match", icon: Puzzle, art: matchArt, title: "Formula Match", tag: "Puzzle", body: "Pair formulas and definitions against the clock.", unit: "pts" },
-  { to: "/games/words", key: "words", icon: Type, art: wordsArt, title: "Word Buster", tag: "Daily", body: "Unscramble one exam word a day. Hints cost points.", unit: "pts" },
+  { to: "/games/words", key: "words", icon: Type, art: wordsArt, title: "Word Buster", tag: "Levels", body: "Level by level, words get longer. 3 tries.", unit: "pts" },
 ];
 
 export default function Arcade() {

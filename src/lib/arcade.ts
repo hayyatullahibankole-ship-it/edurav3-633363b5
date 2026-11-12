@@ -101,3 +101,25 @@ export function scramble(word: string, rand = Math.random): string {
 }
 /** 100 base, -25 per hint, -10 per wrong guess, min 10 when solved. */
 export const wordScore = (hints: number, wrong: number) => Math.max(10, 100 - hints * 25 - wrong * 10);
+
+// ---------- Levels (shared) ----------
+/** Level goes up every `per` correct answers, starting at 1. */
+export const levelFromCount = (correct: number, per = 5) => Math.floor(correct / per) + 1;
+export function getBestLevel(game: string): number {
+  try { return Number(JSON.parse(localStorage.getItem("edura_arcade_levels") || "{}")[game] || 0); } catch { return 0; }
+}
+export function saveBestLevel(game: string, level: number) {
+  try {
+    const all = JSON.parse(localStorage.getItem("edura_arcade_levels") || "{}");
+    if (level > (all[game] || 0)) { all[game] = level; localStorage.setItem("edura_arcade_levels", JSON.stringify(all)); }
+  } catch { /* ignore */ }
+}
+/** Formula Match: level 1 = 4 pairs/60s; each level adds a pair (max 10) and the clock gets tighter. */
+export function matchLevelConfig(level: number) {
+  const pairs = Math.min(3 + level, 10);
+  return { pairs, seconds: Math.max(30, pairs * 15 - (level - 1) * 5) };
+}
+/** Word Buster: 3 tries per run; each solved word is one level, words ordered shortest first. */
+export const WORD_TRIES = 3;
+export const wordsByDifficulty = <T extends { word: string }>(words: T[]) =>
+  [...words].sort((a, b) => a.word.length - b.word.length || a.word.localeCompare(b.word));

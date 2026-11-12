@@ -11,7 +11,7 @@ import { findCorrectIndex, loadGameQuestions, type GameQuestion } from "@/compon
 import { GameStage, useCommentator } from "@/components/games/GameStage";
 import { sfx } from "@/lib/gameAudio";
 import stageBg from "@/assets/game-blitz.jpg";
-import { BLITZ_START_SECONDS, applyBlitzAnswer, blitzMultiplier, saveBestScore, type BlitzState } from "@/lib/arcade";
+import { levelFromCount, saveBestLevel, BLITZ_START_SECONDS, applyBlitzAnswer, blitzMultiplier, saveBestScore, type BlitzState } from "@/lib/arcade";
 
 type Phase = "setup" | "loading" | "play" | "over";
 
@@ -41,7 +41,8 @@ export default function Blitz() {
   }, [phase]);
 
   useEffect(() => {
-    if (phase === "play" && state.secondsLeft <= 0) { setNewBest(saveBestScore("blitz", state.score)); sfx.lose(); say("lose"); setPhase("over"); }
+    if (phase === "play" && state.secondsLeft <= 0) { saveBestLevel("blitz", levelFromCount(answered.right)); setNewBest(saveBestScore("blitz", state.score)); sfx.lose(); say("lose"); setPhase("over"); }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, state.secondsLeft, state.score]);
 
   const start = async (ids: string[]) => {
@@ -84,7 +85,7 @@ export default function Blitz() {
       {phase === "loading" && <div className="grid place-items-center py-20"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>}
 
       {phase === "play" && queue[0] && (
-        <GameStage bg={stageBg} line={line} flash={flash}>
+        <GameStage bg={stageBg} line={line} flash={flash} level={levelFromCount(answered.right)}>
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-2">
             <div className={cn("rounded-2xl border-2 border-gold/40 bg-ink/80 p-3 text-center", state.secondsLeft <= 10 && "border-destructive")}>
@@ -108,7 +109,7 @@ export default function Blitz() {
       {phase === "over" && (
         <div className="mx-auto max-w-md space-y-4 rounded-3xl border-2 border-ink bg-ink p-8 text-center text-ink-foreground shadow-[0_8px_0_0_hsl(var(--primary))]">
           <Zap className="mx-auto h-10 w-10 text-gold" />
-          <h2 className="font-display text-2xl font-bold">Time's up!</h2>
+          <h2 className="font-display text-2xl font-bold">Time's up! Level {levelFromCount(answered.right)}</h2>
           <p className="font-display text-5xl font-extrabold text-gold">{state.score} pts</p>
           <p className="text-ink-foreground/70">{answered.right} of {answered.total} correct</p>
           {newBest && <p className="text-sm font-semibold">New personal best!</p>}

@@ -84,7 +84,7 @@ export default function Millionaire() {
       {phase === "loading" && <div className="grid place-items-center py-20"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>}
 
       {phase === "play" && current && (
-        <GameStage bg={stageBg} line={line} flash={flash}>
+        <GameStage bg={stageBg} line={line} flash={flash} level={Math.min(3, Math.floor(step / 5) + 1)}>
         <div className="grid gap-6 lg:grid-cols-[1fr_220px]">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
