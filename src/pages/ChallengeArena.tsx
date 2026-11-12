@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { useSubscription } from '@/hooks/useSubscription';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -44,7 +43,6 @@ interface LeaderboardEntry {
 export default function ChallengeArena() {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const { isEnterprise, loading: subLoading } = useSubscription();
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -150,7 +148,7 @@ useEffect(() => {
     }
   };
 
-  if (subLoading || loading) {
+  if (loading) {
     return (
       <Layout showNavbar={false} showMobileNav={false}>
         <div className="flex items-center justify-center min-h-screen">
