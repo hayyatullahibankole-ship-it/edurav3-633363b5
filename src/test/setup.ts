@@ -69,7 +69,11 @@ Object.defineProperty(window, "ResizeObserver", {
       return Promise.resolve();
     }
   }
-  (window as any).AudioContext = StubAudioContext;
+  Object.defineProperty(window, "AudioContext", {
+    value: StubAudioContext,
+    writable: true,
+    configurable: true,
+  });
 }
 
 // Capacitor native APIs are no-ops in tests.
