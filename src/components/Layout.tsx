@@ -1,10 +1,12 @@
 import { ReactNode, useEffect } from "react";
 import Navbar from "./Navbar";
 import WhatsAppButton from "./WhatsAppButton";
-import { MobileTabBar } from "@/components/edura/AppShell";
+import { MobileTabBar, CANDIDATE_NAV, PUBLIC_NAV } from "@/components/edura/AppShell";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useInstalledApp } from "@/hooks/useInstalledApp";
 import { useNativeApp } from "@/hooks/useNativeApp";
+import { useAuth } from "@/hooks/useAuth";
+import { LogIn } from "lucide-react";
 import { StatusBar, Style } from "@capacitor/status-bar";
 
 interface LayoutProps {
@@ -22,6 +24,7 @@ const Layout = ({
 }: LayoutProps) => {
   const { isInstalledApp } = useInstalledApp();
   const { isNative } = useNativeApp();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -33,35 +36,11 @@ const Layout = ({
     }
   }, [isNative]);
 
-  // Determine active tab based on current route
-  const getActiveTab = () => {
-    if (location.pathname === "/dashboard" || location.pathname === "/mobile-home") return "dashboard";
-    if (location.pathname === "/study-hub" || location.pathname === "/dashboard") return "cbt";
-    if (location.pathname === "/services" || location.pathname === "/wallet") return "services";
-    if (
-      location.pathname.includes("profile") ||
-      location.search.includes("tab=profile") ||
-      location.search.includes("tab=settings")
-    )
-      return "profile";
-    return "dashboard";
-  };
-
-  const handleTabChange = (tab: string) => {
-    if (tab === "dashboard") {
-      navigate(isInstalledApp || isNative ? "/mobile-home" : "/dashboard");
-    } else if (tab === "cbt") {
-      navigate("/dashboard");
-    } else if (tab === "services") {
-      navigate("/services");
-    } else if (tab === "profile") {
-      navigate("/dashboard?tab=profile");
-    }
-  };
-
-  // ✅ Mobile Navigation: show ONLY for the app (installed PWA OR native app)
+  // Mobile navigation always lives at the bottom of the screen — for visitors
+  // and for signed-in students alike. Wait for auth to settle so a returning
+  // student never sees the signed-out tabs flash first.
   const isAuthRoute = location.pathname === "/auth";
-  const shouldShowMobileNav = showMobileNav && !isAuthRoute && (isInstalledApp || isNative);
+  const showBottomNav = showMobileNav && !isAuthRoute && !loading;
 
   return (
     <div className="min-h-screen bg-background">
@@ -71,12 +50,18 @@ const Layout = ({
 
       {showWhatsAppButton && !(isInstalledApp || isNative) && <WhatsAppButton />}
 
-      {/* Mobile Navigation - Show ONLY for installed apps / native app */}
-      {shouldShowMobileNav && (
+      {showBottomNav && (
         <>
-          <MobileTabBar />
-          {/* Add padding to bottom to prevent content being hidden by nav */}
-          <div className="h-20" />
+          {user ? (
+            <MobileTabBar items={CANDIDATE_NAV} />
+          ) : (
+            <MobileTabBar
+              items={PUBLIC_NAV}
+              center={{ icon: LogIn, label: "Get started", onClick: () => navigate("/auth") }}
+            />
+          )}
+          {/* Keeps the last card clear of the bottom dock. */}
+          <div className="h-24 lg:hidden" />
         </>
       )}
     </div>

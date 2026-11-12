@@ -10,6 +10,7 @@ import {
   UserCog,
   GraduationCap,
   Briefcase,
+  CreditCard,
   Calculator,
   Sparkles,
   MoreHorizontal,
@@ -51,11 +52,22 @@ export type ShellNavItem = {
  * Four labelled tabs for every candidate surface. The raised centre action sits
  * between CBT and Services and is rendered separately.
  */
-const CANDIDATE_NAV: ShellNavItem[] = [
+export const CANDIDATE_NAV: ShellNavItem[] = [
   { to: "/dashboard", label: "Home", icon: LayoutGrid, end: true },
   { to: "/cbt", label: "CBT", icon: GraduationCap },
   { to: "/services", label: "Services", icon: Briefcase },
   { to: "/wallet", label: "Wallet", icon: WalletIcon },
+];
+
+/**
+ * Bottom-bar tabs for visitors who haven't signed in: public pages only, so a
+ * tap never bounces a newcomer into the sign-in wall.
+ */
+export const PUBLIC_NAV: ShellNavItem[] = [
+  { to: "/", label: "Home", icon: LayoutGrid, end: true },
+  { to: "/demo", label: "Practice", icon: GraduationCap },
+  { to: "/services", label: "Services", icon: Briefcase },
+  { to: "/payment", label: "Pricing", icon: CreditCard },
 ];
 
 const CAMPUS_NAV: ShellNavItem[] = [
