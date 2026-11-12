@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { GameStage, useCommentator } from "@/components/games/GameStage";
 import { MATCH_PAIRS } from "@/components/games/gameContent";
-import { MATCH_ROUND_PAIRS, MATCH_START_SECONDS, matchScore, saveBestScore } from "@/lib/arcade";
+import { matchLevelConfig, matchScore, saveBestScore, saveBestLevel } from "@/lib/arcade";
 import { sfx } from "@/lib/gameAudio";
 import stageBg from "@/assets/game-match.jpg";
 
@@ -22,26 +22,31 @@ export default function FormulaMatch() {
   const [done, setDone] = useState<number[]>([]);
   const [wrong, setWrong] = useState<string[]>([]);
   const [misses, setMisses] = useState(0);
-  const [secs, setSecs] = useState(MATCH_START_SECONDS);
+  const [secs, setSecs] = useState(60);
+  const [level, setLevel] = useState(1);
+  const [total, setTotal] = useState(0);
   const [final, setFinal] = useState(0);
   const [newBest, setNewBest] = useState(false);
   const [flash, setFlash] = useState<"good" | "bad" | null>(null);
   const { line, say } = useCommentator();
 
-  const start = () => {
+  const start = () => { setTotal(0); setLevel(1); deal(1); sfx.start(); say("start"); };
+  const deal = (lv: number) => {
+    const { pairs, seconds } = matchLevelConfig(lv);
     const pool = MATCH_PAIRS.map((p, i) => ({ ...p, i })).filter((p) => subject === "All" || p.subject === subject);
-    const picked = shuffle(pool).slice(0, MATCH_ROUND_PAIRS);
+    const picked = shuffle(pool).slice(0, pairs);
     setTiles(shuffle(picked.flatMap((p) => [
       { id: `${p.i}a`, pair: p.i, text: p.a, side: "a" as const },
       { id: `${p.i}b`, pair: p.i, text: p.b, side: "b" as const },
     ])));
-    setDone([]); setSel(null); setMisses(0); setSecs(MATCH_START_SECONDS); setPhase("play"); sfx.start(); say("start");
+    setDone([]); setSel(null); setMisses(0); setSecs(seconds); setPhase("play");
   };
 
   const finish = (pairs: number, m: number, s: number) => {
-    const sc = matchScore(pairs, m, s); setFinal(sc); setNewBest(saveBestScore("match", sc));
-    if (pairs === tiles.length / 2) { sfx.win(); say("win"); } else { sfx.lose(); say("lose"); }
-    setPhase("over");
+    const sc = total + matchScore(pairs, m, s);
+    if (pairs === tiles.length / 2) { setTotal(sc); setLevel(level + 1); deal(level + 1); return; }
+    setFinal(sc); setNewBest(saveBestScore("match", sc)); saveBestLevel("match", level);
+    sfx.lose(); say("lose"); setPhase("over");
   };
 
   useEffect(() => {
@@ -84,11 +89,11 @@ export default function FormulaMatch() {
         </div>
       )}
       {phase === "play" && (
-        <GameStage bg={stageBg} line={line} flash={flash}>
+        <GameStage bg={stageBg} line={line} flash={flash} level={level}>
           <div className="space-y-4">
             <div className="flex items-center justify-between rounded-2xl border-2 border-gold/40 bg-ink/80 px-4 py-2">
               <span className={cn("flex items-center gap-2 font-display text-2xl font-extrabold tabular-nums", secs <= 10 && "text-destructive")}><Timer className="h-5 w-5 text-gold" />{secs}s</span>
-              <span className="font-display font-bold text-gold">{done.length}/{tiles.length / 2} pairs</span>
+              <span className="font-display font-bold text-gold">{done.length}/{tiles.length / 2} pairs · {total} pts</span>
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
               {tiles.map((t) => {
@@ -112,9 +117,9 @@ export default function FormulaMatch() {
       {phase === "over" && (
         <div className="mx-auto max-w-md space-y-4 rounded-3xl border-2 border-ink bg-ink p-8 text-center text-ink-foreground shadow-[0_8px_0_0_hsl(var(--primary))]">
           <Puzzle className="mx-auto h-10 w-10 text-gold" />
-          <h2 className="font-display text-2xl font-bold">{done.length === tiles.length / 2 ? "All matched!" : "Time's up!"}</h2>
+          <h2 className="font-display text-2xl font-bold">Time's up on level {level}</h2>
           <p className="font-display text-5xl font-extrabold text-gold">{final} pts</p>
-          <p className="text-ink-foreground/70">{done.length} pairs · {misses} misses</p>
+          <p className="text-ink-foreground/70">You cleared {level - 1} level{level === 2 ? "" : "s"}</p>
           {newBest && <p className="text-sm font-semibold">New personal best!</p>}
           <div className="flex justify-center gap-2">
             <Button onClick={start}>Play again</Button>
