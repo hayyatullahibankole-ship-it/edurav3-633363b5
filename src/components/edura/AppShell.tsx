@@ -66,8 +66,14 @@ const CAMPUS_NAV: ShellNavItem[] = [
 
 /** Extra destinations that only appear in the desktop rail. */
 const DESKTOP_EXTRAS: Record<ShellSide, ShellNavItem[]> = {
-  cbt: [{ to: "/study-hub", label: "Study hub", icon: BookOpen }],
-  services: [{ to: "/study-hub", label: "Study hub", icon: BookOpen }],
+  cbt: [
+    { to: "/study-hub", label: "Study hub", icon: BookOpen },
+    { to: "/ebooks", label: "Ebooks", icon: Library },
+  ],
+  services: [
+    { to: "/study-hub", label: "Study hub", icon: BookOpen },
+    { to: "/ebooks", label: "Ebooks", icon: Library },
+  ],
   campus: [
     { to: "/campus/tools", label: "Study tools", icon: Calculator },
     { to: "/campus/opportunities", label: "Opportunities", icon: Compass },
