@@ -35,8 +35,8 @@ Object.defineProperty(window, "ResizeObserver", {
   },
 });
 
-// jsdom has no Web Audio API, but UI sound utilities construct a context at import time.
-if (!(window as any).AudioContext) {
+// jsdom has no usable Web Audio API, but UI sound utilities construct a context at import time.
+{
   class StubAudioContext {
     sampleRate = 44100;
     currentTime = 0;
