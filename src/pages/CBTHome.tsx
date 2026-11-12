@@ -16,6 +16,7 @@ import {
   Layers,
   Play,
   Gamepad2,
+  Bookmark,
 } from "lucide-react";
 import AppShell from "@/components/edura/AppShell";
 import { ListRow, Panel, EmptyState } from "@/components/edura/tiles";

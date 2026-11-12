@@ -19,6 +19,7 @@ import {
   Settings as SettingsIcon,
   LogOut,
   type LucideIcon,
+  Bookmark,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
