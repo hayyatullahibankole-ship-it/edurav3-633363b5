@@ -101,13 +101,15 @@ const CBTHome = () => {
           />
         ) : (
           <ScheduleTestModal>
-            <PrimaryActionCard
-              eyebrow="Recommended"
-              title="Practise with real exam questions"
-              description="Start a timed session with real exam questions, then review every answer immediately."
-              actionLabel="Start practice now"
-              icon={Play}
-            />
+            <div className="cursor-pointer">
+              <PrimaryActionCard
+                eyebrow="Recommended"
+                title="Practise with real exam questions"
+                description="Start a timed session with real exam questions, then review every answer immediately."
+                actionLabel="Start practice now"
+                icon={Play}
+              />
+            </div>
           </ScheduleTestModal>
         )}
 
