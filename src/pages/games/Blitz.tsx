@@ -8,6 +8,9 @@ import { cn } from "@/lib/utils";
 import { SubjectPicker } from "@/components/games/SubjectPicker";
 import { GameQuestionCard } from "@/components/games/GameQuestionCard";
 import { findCorrectIndex, loadGameQuestions, type GameQuestion } from "@/components/games/gameQuestions";
+import { GameStage, useCommentator } from "@/components/games/GameStage";
+import { sfx } from "@/lib/gameAudio";
+import stageBg from "@/assets/game-blitz.jpg";
 import { BLITZ_START_SECONDS, applyBlitzAnswer, blitzMultiplier, saveBestScore, type BlitzState } from "@/lib/arcade";
 
 type Phase = "setup" | "loading" | "play" | "over";
@@ -22,6 +25,14 @@ export default function Blitz() {
   const [checking, setChecking] = useState(false);
   const [newBest, setNewBest] = useState(false);
   const idsRef = useRef<string[]>([]);
+  const [flash, setFlash] = useState<"good" | "bad" | null>(null);
+  const { line, say } = useCommentator();
+
+  useEffect(() => {
+    if (phase !== "play") return;
+    if (state.secondsLeft === 10) say("hurry");
+    if (state.secondsLeft > 0 && state.secondsLeft <= 10) sfx.tick();
+  }, [phase, state.secondsLeft, say]);
 
   useEffect(() => {
     if (phase !== "play") return;
@@ -30,7 +41,7 @@ export default function Blitz() {
   }, [phase]);
 
   useEffect(() => {
-    if (phase === "play" && state.secondsLeft <= 0) { setNewBest(saveBestScore("blitz", state.score)); setPhase("over"); }
+    if (phase === "play" && state.secondsLeft <= 0) { setNewBest(saveBestScore("blitz", state.score)); sfx.lose(); say("lose"); setPhase("over"); }
   }, [phase, state.secondsLeft, state.score]);
 
   const start = async (ids: string[]) => {
@@ -39,7 +50,7 @@ export default function Blitz() {
       const qs = await loadGameQuestions(ids, Math.ceil(40 / ids.length));
       if (qs.length < 5) { toast.error("Not enough questions in these subjects yet."); setPhase("setup"); return; }
       setQueue(qs); setState({ secondsLeft: BLITZ_START_SECONDS, streak: 0, score: 0 });
-      setAnswered({ right: 0, total: 0 }); setPicked(null); setCorrect(null); setPhase("play");
+      setAnswered({ right: 0, total: 0 }); setPicked(null); setCorrect(null); setPhase("play"); sfx.start(); say("start");
     } catch { toast.error("Couldn't load questions. Check your connection."); setPhase("setup"); }
   };
 
@@ -49,12 +60,17 @@ export default function Blitz() {
     const c = await findCorrectIndex(q);
     setChecking(false); setCorrect(c);
     const ok = i === c;
+    setFlash(ok ? "good" : "bad");
+    const nextStreak = ok ? state.streak + 1 : 0;
+    if (ok && blitzMultiplier(nextStreak) > blitzMultiplier(state.streak)) { sfx.streak(); say("streak"); }
+    else if (ok) { sfx.correct(); if (Math.random() < 0.35) say("correct"); }
+    else { sfx.wrong(); say("wrong"); }
     setState((s) => applyBlitzAnswer(s, ok));
     setAnswered((a) => ({ right: a.right + (ok ? 1 : 0), total: a.total + 1 }));
     setTimeout(async () => {
       let rest = queue.slice(1);
       if (rest.length < 3) rest = [...rest, ...(await loadGameQuestions(idsRef.current, 10).catch(() => []))];
-      setQueue(rest); setPicked(null); setCorrect(null);
+      setQueue(rest); setPicked(null); setCorrect(null); setFlash(null);
     }, ok ? 450 : 900);
   };
 
@@ -68,23 +84,25 @@ export default function Blitz() {
       {phase === "loading" && <div className="grid place-items-center py-20"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>}
 
       {phase === "play" && queue[0] && (
-        <div className="space-y-4 rounded-3xl bg-ink p-4 text-ink-foreground sm:p-6">
+        <GameStage bg={stageBg} line={line} flash={flash}>
+        <div className="space-y-4">
           <div className="grid grid-cols-3 gap-2">
-            <div className={cn("rounded-2xl border-2 border-ink-soft bg-ink-soft p-3 text-center", state.secondsLeft <= 10 && "border-destructive")}>
+            <div className={cn("rounded-2xl border-2 border-gold/40 bg-ink/80 p-3 text-center", state.secondsLeft <= 10 && "border-destructive")}>
               <Timer className="mx-auto h-4 w-4 text-gold" />
               <p className={cn("font-display text-3xl font-extrabold tabular-nums", state.secondsLeft <= 10 && "text-destructive")}>{state.secondsLeft}</p>
             </div>
-            <div className="rounded-2xl border-2 border-ink-soft bg-ink-soft p-3 text-center">
+            <div className="rounded-2xl border-2 border-gold/40 bg-ink/80 p-3 text-center">
               <p className="text-xs text-muted-foreground">Score</p>
               <p className="font-display text-3xl font-extrabold tabular-nums">{state.score}</p>
             </div>
-            <div className="rounded-2xl border-2 border-ink-soft bg-ink-soft p-3 text-center">
+            <div className="rounded-2xl border-2 border-gold/40 bg-ink/80 p-3 text-center">
               <Zap className={cn("mx-auto h-4 w-4", mult > 1 ? "text-primary" : "text-muted-foreground")} />
               <p className="font-display text-3xl font-extrabold">{mult}x</p>
             </div>
           </div>
           <GameQuestionCard question={queue[0]} picked={picked} correct={correct} disabled={checking} onPick={pick} />
         </div>
+        </GameStage>
       )}
 
       {phase === "over" && (

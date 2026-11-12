@@ -770,3 +770,6 @@ All colors MUST be HSL for consistency across light/dark modes.
 @media (prefers-reduced-motion: reduce) {
   .akboy-marquee { animation: none; }
 }
+
+@keyframes arcade-flash { from { opacity: 1; } to { opacity: 0; } }
+.animate-arcade-flash { animation: arcade-flash 0.7s ease-out forwards; }
