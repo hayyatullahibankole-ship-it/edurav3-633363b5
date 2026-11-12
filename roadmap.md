@@ -3,3 +3,4 @@
 - [x] Correct analytics labels and add login-based activity.
 - [x] Add and run focused activity/filter tests; check preview diagnostics.
 - [x] Remove automatic 30-day signup access; let admins choose off, 3 days, or 7 days, and restrict manual free-access grants to 3 or 7 days.
+- [x] Move mobile navigation to a bottom dock on every Edura surface; top bar becomes brand + call-to-action only.
