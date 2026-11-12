@@ -20,6 +20,7 @@ import UpgradeToCampus from "@/components/edura/UpgradeToCampus";
 import OnboardingTour from "@/components/OnboardingTour";
 import StreakHero from "@/components/edura/gamify/StreakHero";
 import TrialStatusCard from "@/components/edura/TrialStatusCard";
+import LatestNewsBanner from "@/components/edura/LatestNewsBanner";
 
 import BadgeStrip from "@/components/edura/gamify/BadgeStrip";
 import CountUp from "@/components/edura/gamify/CountUp";
@@ -223,6 +224,8 @@ const Dashboard = () => {
           </div>
 
           <WeekStrip activeDays={activeDays} className="lg:hidden" />
+
+          <LatestNewsBanner />
 
           <TrialStatusCard />
 
