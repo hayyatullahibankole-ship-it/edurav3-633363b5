@@ -69,3 +69,35 @@ export function saveBestScore(game: string, score: number): boolean {
   localStorage.setItem(BEST_KEY, JSON.stringify(all));
   return true;
 }
+
+// ---------- Survival ----------
+export const SURVIVAL_HEARTS = 3;
+/** Points per right answer grow every 5 correct: 10, 20, 30... */
+export const survivalPoints = (correctSoFar: number) => 10 * (Math.floor(correctSoFar / 5) + 1);
+
+// ---------- Formula Match ----------
+export const MATCH_ROUND_PAIRS = 6;
+export const MATCH_START_SECONDS = 90;
+/** Score: 100 per pair, minus 20 per miss, plus 5 per second left. Never below 0. */
+export const matchScore = (pairs: number, misses: number, secondsLeft: number) =>
+  Math.max(0, pairs * 100 - misses * 20 + secondsLeft * 5);
+
+// ---------- Word Buster ----------
+/** Same word for everyone on a given Lagos date. */
+export function dailyIndex(date: Date, length: number): number {
+  const lagos = new Date(date.getTime() + 60 * 60 * 1000);
+  const days = Math.floor(lagos.getTime() / 86_400_000);
+  return ((days % length) + length) % length;
+}
+export function scramble(word: string, rand = Math.random): string {
+  if (new Set(word).size < 2) return word;
+  let out = word;
+  while (out === word) {
+    const a = word.split("");
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    out = a.join("");
+  }
+  return out;
+}
+/** 100 base, -25 per hint, -10 per wrong guess, min 10 when solved. */
+export const wordScore = (hints: number, wrong: number) => Math.max(10, 100 - hints * 25 - wrong * 10);
