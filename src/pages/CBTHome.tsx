@@ -87,14 +87,31 @@ const CBTHome = () => {
       }
     >
       <div className="space-y-4">
-        <PrimaryActionCard
-          eyebrow="Recommended"
-          title="Practise with real exam questions"
-          description="Pick an exam below to start a timed session, then review every answer immediately."
-          to="/study-hub"
-          actionLabel="Browse study hub"
-          icon={Play}
-        />
+        {isMobileBrowser ? (
+          <PrimaryActionCard
+            eyebrow="Recommended"
+            title="Practise with real exam questions"
+            description="Start a timed session with real exam questions, then review every answer immediately."
+            actionLabel="Start practice now"
+            icon={Play}
+            onAction={() => {
+              setBlockedFeature("CBT Practice");
+              setShowInstallModal(true);
+            }}
+          />
+        ) : (
+          <ScheduleTestModal>
+            <div className="cursor-pointer">
+              <PrimaryActionCard
+                eyebrow="Recommended"
+                title="Practise with real exam questions"
+                description="Start a timed session with real exam questions, then review every answer immediately."
+                actionLabel="Start practice now"
+                icon={Play}
+              />
+            </div>
+          </ScheduleTestModal>
+        )}
 
         <section aria-label="Practice tools" className="animate-screen-in">
           <div className="mb-2 flex items-center justify-between">
