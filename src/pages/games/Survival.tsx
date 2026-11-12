@@ -9,7 +9,7 @@ import { SubjectPicker } from "@/components/games/SubjectPicker";
 import { GameQuestionCard } from "@/components/games/GameQuestionCard";
 import { GameStage, useCommentator } from "@/components/games/GameStage";
 import { findCorrectIndex, loadGameQuestions, type GameQuestion } from "@/components/games/gameQuestions";
-import { SURVIVAL_HEARTS, survivalPoints, saveBestScore } from "@/lib/arcade";
+import { SURVIVAL_HEARTS, survivalPoints, saveBestScore, levelFromCount, saveBestLevel } from "@/lib/arcade";
 import { sfx } from "@/lib/gameAudio";
 import stageBg from "@/assets/game-survival.jpg";
 
@@ -53,7 +53,7 @@ export default function Survival() {
       left = hearts - 1; setHearts(left); setFlash("bad"); sfx.wrong(); say(left === 0 ? "lose" : "wrong");
     }
     setTimeout(async () => {
-      if (left === 0) { sfx.lose(); setNewBest(saveBestScore("survival", total)); setPhase("over"); return; }
+      if (left === 0) { sfx.lose(); saveBestLevel("survival", levelFromCount(right + (i === c ? 1 : 0))); setNewBest(saveBestScore("survival", total)); setPhase("over"); return; }
       let rest = queue.slice(1);
       if (rest.length < 3) rest = [...rest, ...(await loadGameQuestions(ids, 10).catch(() => []))];
       if (!rest.length) { setNewBest(saveBestScore("survival", total)); setPhase("over"); return; }
@@ -67,7 +67,7 @@ export default function Survival() {
       {phase === "setup" && <SubjectPicker cta="Enter the arena" onStart={start} />}
       {phase === "loading" && <div className="grid place-items-center py-20"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>}
       {phase === "play" && queue[0] && (
-        <GameStage bg={stageBg} line={line} flash={flash}>
+        <GameStage bg={stageBg} line={line} flash={flash} level={levelFromCount(right)}>
           <div className="space-y-4">
             <div className="grid grid-cols-3 gap-2">
               <div className="rounded-2xl border-2 border-gold/40 bg-ink/80 p-3 text-center">
@@ -94,7 +94,8 @@ export default function Survival() {
       {phase === "over" && (
         <div className="mx-auto max-w-md space-y-4 rounded-3xl border-2 border-ink bg-ink p-8 text-center text-ink-foreground shadow-[0_8px_0_0_hsl(var(--primary))]">
           <Skull className="mx-auto h-10 w-10 text-gold" />
-          <h2 className="font-display text-2xl font-bold">You survived {right} questions</h2>
+          <h2 className="font-display text-2xl font-bold">You reached level {levelFromCount(right)}</h2>
+          <p className="text-ink-foreground/70">{right} questions survived</p>
           <p className="font-display text-5xl font-extrabold text-gold">{score} pts</p>
           {newBest && <p className="text-sm font-semibold">New personal best!</p>}
           <div className="flex justify-center gap-2">
