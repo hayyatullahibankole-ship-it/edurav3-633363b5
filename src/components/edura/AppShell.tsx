@@ -84,6 +84,7 @@ const DESKTOP_EXTRAS: Record<ShellSide, ShellNavItem[]> = {
     { to: "/study-hub", label: "Classroom", icon: BookOpen },
     { to: "/ebooks", label: "Ebooks", icon: Library },
     { to: "/games", label: "Games", icon: Gamepad2 },
+    { to: "/bookmarks", label: "Bookmarks", icon: Bookmark },
   ],
   services: [
     { to: "/study-hub", label: "Classroom", icon: BookOpen },
