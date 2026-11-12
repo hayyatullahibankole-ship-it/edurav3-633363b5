@@ -28,6 +28,7 @@ export const PrimaryActionCard = ({
   title,
   description,
   to,
+  onAction,
   actionLabel,
   progress,
   icon: Icon,
@@ -35,7 +36,8 @@ export const PrimaryActionCard = ({
   eyebrow: string;
   title: string;
   description: string;
-  to: string;
+  to?: string;
+  onAction?: () => void;
   actionLabel: string;
   progress?: number;
   icon?: LucideIcon;
@@ -61,13 +63,24 @@ export const PrimaryActionCard = ({
         <span className="text-xs font-bold tabular">{Math.round(progress)}%</span>
       </div>
     )}
-    <Link
-      to={to}
-      className="press mt-5 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground"
-    >
-      {actionLabel}
-      <ArrowRight className="h-4 w-4" />
-    </Link>
+    {to ? (
+      <Link
+        to={to}
+        className="press mt-5 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground"
+      >
+        {actionLabel}
+        <ArrowRight className="h-4 w-4" />
+      </Link>
+    ) : (
+      <button
+        type="button"
+        onClick={onAction}
+        className="press mt-5 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground"
+      >
+        {actionLabel}
+        <ArrowRight className="h-4 w-4" />
+      </button>
+    )}
   </section>
 );
 
