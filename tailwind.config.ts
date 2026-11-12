@@ -40,6 +40,7 @@ export default {
           soft: "hsl(var(--ink-soft))",
           foreground: "hsl(var(--ink-foreground))",
         },
+        gold: { DEFAULT: "hsl(var(--game-gold))", foreground: "hsl(var(--game-gold-foreground))" },
         mint: { DEFAULT: "hsl(var(--tint-mint))", foreground: "hsl(var(--tint-mint-foreground))" },
         sky: { DEFAULT: "hsl(var(--tint-sky))", foreground: "hsl(var(--tint-sky-foreground))" },
         butter: { DEFAULT: "hsl(var(--tint-butter))", foreground: "hsl(var(--tint-butter-foreground))" },

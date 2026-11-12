@@ -13,7 +13,7 @@ interface Props {
 
 export const GameQuestionCard = ({ question, hidden = [], picked, correct, disabled, onPick }: Props) => (
   <div className="space-y-4">
-    <div className="rounded-2xl border bg-card p-5 text-base font-medium leading-relaxed">
+    <div className="rounded-2xl border-2 border-gold bg-card p-5 text-base font-semibold leading-relaxed text-card-foreground">
       <ContentRenderer content={question.text} />
     </div>
     <div className="grid gap-2.5 sm:grid-cols-2">
@@ -27,7 +27,7 @@ export const GameQuestionCard = ({ question, hidden = [], picked, correct, disab
             disabled={disabled || isHidden || revealed}
             onClick={() => onPick(i)}
             className={cn(
-              "press flex min-h-14 items-center gap-3 rounded-xl border-2 bg-card px-4 py-3 text-left text-sm transition-colors",
+              "flex min-h-14 items-center gap-3 rounded-xl border-2 border-ink bg-card px-4 py-3 text-left text-sm font-medium text-card-foreground shadow-[0_4px_0_0_hsl(var(--ink-soft))] transition-all active:translate-y-1 active:shadow-none",
               !revealed && !isHidden && "hover:border-primary",
               picked === i && !revealed && "border-primary bg-primary/10",
               revealed && i === correct && "border-primary bg-primary/15",
@@ -35,7 +35,7 @@ export const GameQuestionCard = ({ question, hidden = [], picked, correct, disab
               isHidden && "opacity-25",
             )}
           >
-            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-muted font-display text-xs font-bold">{o.key}</span>
+            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold font-display text-xs font-extrabold text-gold-foreground">{o.key}</span>
             <span className={cn(isHidden && "invisible")}><ContentRenderer content={o.text} /></span>
           </button>
         );
