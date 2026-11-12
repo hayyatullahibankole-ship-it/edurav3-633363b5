@@ -26,9 +26,21 @@ import { Button } from "@/components/ui/button";
 import { useStudentStats } from "@/hooks/useStudentStats";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useInstalledApp } from "@/hooks/useInstalledApp";
-import { MobileSection, PrimaryActionCard, MobileToolCard } from "@/components/edura/MobilePrimitives";
+import { MobileSection, PrimaryActionCard } from "@/components/edura/MobilePrimitives";
 import ExamBadge from "@/components/edura/ExamBadge";
 
+
+const PRACTICE_TOOLS = [
+  { to: "/study-hub", icon: Target, title: "Study hub" },
+  { to: "/resources", icon: FileText, title: "Past questions" },
+  { to: "/ebooks", icon: BookOpen, title: "Ebooks" },
+  { to: "/ai-tutor", icon: Bot, title: "Ask a tutor" },
+  { to: "/decks", icon: Layers, title: "Study decks" },
+  { to: "/challenge-arena", icon: Sword, title: "Challenges" },
+  { to: "/leaderboard", icon: Trophy, title: "Leaderboard" },
+  { to: "/performance-report", icon: Award, title: "My report" },
+  { to: "/forum", icon: MessageSquare, title: "Forum" },
+];
 
 const EXAM_TYPES = [
   { type: "jamb" as const, label: "JAMB", subtitle: "UTME practice", icon: GraduationCap },
@@ -83,6 +95,26 @@ const CBTHome = () => {
           actionLabel="Browse study hub"
           icon={Play}
         />
+
+        <section aria-label="Practice tools" className="animate-screen-in">
+          <div className="mb-2 flex items-center justify-between">
+            <h2 className="font-display text-[15px] font-bold">Practice tools</h2>
+          </div>
+          <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-5 sm:overflow-visible sm:px-0 lg:grid-cols-9">
+            {PRACTICE_TOOLS.map((tool) => (
+              <Link
+                key={tool.to}
+                to={tool.to}
+                className="press flex w-[5.5rem] shrink-0 flex-col items-center gap-1.5 rounded-2xl border bg-card px-2 py-3 text-center transition-colors hover:border-primary/40 sm:w-auto"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <tool.icon className="h-5 w-5" strokeWidth={2.2} />
+                </span>
+                <span className="text-[11px] font-semibold leading-tight">{tool.title}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
 
         <section className="animate-screen-in">
           <div className="mb-3">
@@ -212,18 +244,6 @@ const CBTHome = () => {
           <SchoolAvailableExams />
         </Panel>
 
-        <MobileSection title="Practice tools">
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <MobileToolCard to="/study-hub" icon={Target} title="Study hub" description="Plan your sessions" tone="mint" />
-            <MobileToolCard to="/decks" icon={Layers} title="Study decks" description="Turn a PDF into quizzes" tone="sky" />
-            <MobileToolCard to="/resources" icon={FileText} title="Past questions" description="Browse by exam" tone="butter" />
-            <MobileToolCard to="/challenge-arena" icon={Sword} title="Challenge arena" description="Compete live with friends" tone="lilac" />
-            <MobileToolCard to="/forum" icon={MessageSquare} title="Forum" description="Ask and answer" tone="peach" />
-            <MobileToolCard to="/ai-tutor" icon={Bot} title="Ask a tutor" description="Instant explanations" tone="sky" />
-            <MobileToolCard to="/leaderboard" icon={Trophy} title="Leaderboard" description="Compare your scores" tone="butter" />
-            <MobileToolCard to="/performance-report" icon={Award} title="My report" description="See where you improve" tone="mint" />
-          </div>
-        </MobileSection>
 
       </div>
 
