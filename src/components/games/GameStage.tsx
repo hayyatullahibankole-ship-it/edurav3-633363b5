@@ -30,7 +30,7 @@ export function GameStage({ bg, line, flash, children }: {
           <span key={i} className="h-2 w-2 animate-pulse rounded-full bg-gold" style={{ animationDelay: `${(i % 4) * 0.25}s` }} />
         ))}
       </div>
-      {flash && <div key={line?.key} className={cn("pointer-events-none absolute inset-0 z-10 animate-fade-out", flash === "good" ? "bg-primary/30" : "bg-destructive/30")} />}
+      {flash && <div key={line?.key} className={cn("pointer-events-none absolute inset-0 z-10 animate-arcade-flash", flash === "good" ? "bg-primary/30" : "bg-destructive/30")} />}
 
       <div className="flex items-center justify-between gap-3 px-4 pt-3 sm:px-6">
         <div className="flex min-h-[44px] flex-1 items-center gap-2">

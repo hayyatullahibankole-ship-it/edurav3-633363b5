@@ -8,6 +8,9 @@ import { toast } from "sonner";
 import { SubjectPicker } from "@/components/games/SubjectPicker";
 import { GameQuestionCard } from "@/components/games/GameQuestionCard";
 import { findCorrectIndex, loadGameQuestions, type GameQuestion } from "@/components/games/gameQuestions";
+import { GameStage, useCommentator } from "@/components/games/GameStage";
+import { sfx } from "@/lib/gameAudio";
+import stageBg from "@/assets/game-millionaire.jpg";
 import { MILLIONAIRE_LADDER, SAFE_HAVEN_STEPS, fiftyFiftyHide, millionaireXpOnMiss, millionaireXpOnWalkAway, saveBestScore } from "@/lib/arcade";
 
 type Phase = "setup" | "loading" | "play" | "over";
@@ -26,6 +29,8 @@ export default function Millionaire() {
   const [doubleActive, setDoubleActive] = useState(false);
   const [finalXp, setFinalXp] = useState(0);
   const [newBest, setNewBest] = useState(false);
+  const [flash, setFlash] = useState<"good" | "bad" | null>(null);
+  const { line, say } = useCommentator();
 
   const start = async (ids: string[]) => {
     setPhase("loading");
@@ -34,39 +39,40 @@ export default function Millionaire() {
       if (qs.length < 16) { toast.error("Not enough questions in these subjects yet. Try adding another subject."); setPhase("setup"); return; }
       const sorted = [...qs].sort((a, b) => a.difficulty - b.difficulty);
       setCurrent(sorted[0]); setPool(sorted.slice(1));
-      setStep(0); setUsed({ fifty: false, swap: false, double: false }); reset(); setPhase("play");
+      setStep(0); setUsed({ fifty: false, swap: false, double: false }); reset(); setPhase("play"); sfx.start(); say("start");
     } catch { toast.error("Couldn't load questions. Check your connection."); setPhase("setup"); }
   };
   const reset = () => { setPicked(null); setCorrect(null); setHidden([]); setDoubleActive(false); };
 
-  const end = (xp: number) => { setFinalXp(xp); setNewBest(saveBestScore("millionaire", xp)); setPhase("over"); };
+  const end = (xp: number, won = false) => { if (won) { sfx.win(); say("win"); } else { sfx.lose(); } setFinalXp(xp); setNewBest(saveBestScore("millionaire", xp)); setPhase("over"); };
 
-  const next = () => { setCurrent(pool[0]); setPool(pool.slice(1)); reset(); };
+  const next = () => { setCurrent(pool[0]); setPool(pool.slice(1)); reset(); setFlash(null); if (step === 14) say("final"); };
 
   const pick = async (i: number) => {
     if (!current || checking) return;
-    setPicked(i); setChecking(true);
+    setPicked(i); setChecking(true); sfx.suspense();
     const c = await findCorrectIndex(current);
     setChecking(false);
     if (i === c) {
       setCorrect(c);
-      const s = step + 1; setStep(s);
-      if (s === 15) setTimeout(() => end(MILLIONAIRE_LADDER[14]), 1200);
+      const s = step + 1; setStep(s); sfx.correct(); setFlash("good");
+      if (s === 15) setTimeout(() => end(MILLIONAIRE_LADDER[14], true), 1200);
+      else say(SAFE_HAVEN_STEPS.includes(s) ? "haven" : "correct");
     } else if (doubleActive) {
-      toast("Wrong — but you have one more try."); setHidden((h) => [...h, i]); setDoubleActive(false); setPicked(null);
+      sfx.wrong(); say("wrong"); toast("Wrong — but you have one more try."); setHidden((h) => [...h, i]); setDoubleActive(false); setPicked(null);
     } else {
-      setCorrect(c);
-      setTimeout(() => end(millionaireXpOnMiss(step)), 1600);
+      setCorrect(c); sfx.wrong(); setFlash("bad"); say("lose");
+      setTimeout(() => end(millionaireXpOnMiss(step)), 2200);
     }
   };
 
   const useFifty = async () => {
-    if (!current) return; setUsed((u) => ({ ...u, fifty: true })); setChecking(true);
+    if (!current) return; setUsed((u) => ({ ...u, fifty: true })); sfx.lifeline(); say("lifeline"); setChecking(true);
     const c = await findCorrectIndex(current); setChecking(false);
     setHidden(fiftyFiftyHide(current.options.length, c));
   };
-  const useSwap = () => { setUsed((u) => ({ ...u, swap: true })); next(); };
-  const useDouble = () => { setUsed((u) => ({ ...u, double: true })); setDoubleActive(true); };
+  const useSwap = () => { setUsed((u) => ({ ...u, swap: true })); sfx.lifeline(); say("lifeline"); next(); };
+  const useDouble = () => { setUsed((u) => ({ ...u, double: true })); sfx.lifeline(); say("lifeline"); setDoubleActive(true); };
 
   const answeredRight = correct !== null && picked === correct;
 
@@ -78,7 +84,8 @@ export default function Millionaire() {
       {phase === "loading" && <div className="grid place-items-center py-20"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>}
 
       {phase === "play" && current && (
-        <div className="grid gap-6 rounded-3xl bg-ink p-4 text-ink-foreground sm:p-6 lg:grid-cols-[1fr_220px]">
+        <GameStage bg={stageBg} line={line} flash={flash}>
+        <div className="grid gap-6 lg:grid-cols-[1fr_220px]">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <p className="font-display text-sm font-bold">Question {step + 1} of 15 · for {fmt(MILLIONAIRE_LADDER[step])} XP</p>
@@ -92,11 +99,11 @@ export default function Millionaire() {
             <GameQuestionCard question={current} hidden={hidden} picked={picked} correct={correct} disabled={checking} onPick={pick} />
             <div className="flex flex-wrap gap-2">
               {answeredRight && step < 15 && <Button size="lg" onClick={next}>Next question</Button>}
-              {correct === null && step > 0 && <Button variant="secondary" onClick={() => end(millionaireXpOnWalkAway(step))}>Walk away with {fmt(MILLIONAIRE_LADDER[step - 1])} XP</Button>}
+              {correct === null && step > 0 && <Button variant="secondary" onClick={() => { say("walk"); end(millionaireXpOnWalkAway(step)); }}>Walk away with {fmt(MILLIONAIRE_LADDER[step - 1])} XP</Button>}
               {checking && <Loader2 className="h-5 w-5 animate-spin text-primary" />}
             </div>
           </div>
-          <ol className="flex flex-col-reverse gap-1 rounded-2xl bg-ink-soft p-3 text-sm">
+          <ol className="flex flex-col-reverse gap-1 rounded-2xl border-2 border-gold/40 bg-ink/80 p-3 text-sm">
             {MILLIONAIRE_LADDER.map((xp, i) => (
               <li key={xp} className={cn("flex justify-between rounded-lg px-3 py-1.5",
                 i === step && "bg-primary text-primary-foreground font-bold",
@@ -107,6 +114,7 @@ export default function Millionaire() {
             ))}
           </ol>
         </div>
+        </GameStage>
       )}
 
       {phase === "over" && (
