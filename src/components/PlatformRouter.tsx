@@ -54,6 +54,9 @@ const ChallengeArena = lazy(() => import("@/pages/ChallengeArena"));
 const Arcade = lazy(() => import("@/pages/Arcade"));
 const Millionaire = lazy(() => import("@/pages/games/Millionaire"));
 const Blitz = lazy(() => import("@/pages/games/Blitz"));
+const Survival = lazy(() => import("@/pages/games/Survival"));
+const FormulaMatch = lazy(() => import("@/pages/games/FormulaMatch"));
+const WordBuster = lazy(() => import("@/pages/games/WordBuster"));
 const ChallengeDetail = lazy(() => import("@/pages/ChallengeDetail"));
 const ChallengeResults = lazy(() => import("@/pages/ChallengeResults"));
 const SchoolRegistration = lazy(() => import("@/pages/SchoolRegistration"));
@@ -468,6 +471,9 @@ const EduraRoutes = () => {
       <Route path="/games" element={<ProtectedRoute><Arcade /></ProtectedRoute>} />
       <Route path="/games/millionaire" element={<ProtectedRoute><Millionaire /></ProtectedRoute>} />
       <Route path="/games/blitz" element={<ProtectedRoute><Blitz /></ProtectedRoute>} />
+      <Route path="/games/survival" element={<ProtectedRoute><Survival /></ProtectedRoute>} />
+      <Route path="/games/match" element={<ProtectedRoute><FormulaMatch /></ProtectedRoute>} />
+      <Route path="/games/words" element={<ProtectedRoute><WordBuster /></ProtectedRoute>} />
       <Route path="/battle" element={<Navigate to="/challenge-arena" replace />} />
       <Route path="/challenge/:challengeId" element={
         <ProtectedRoute>

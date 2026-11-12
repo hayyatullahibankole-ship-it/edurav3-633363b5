@@ -1,17 +1,19 @@
 import { Link } from "react-router-dom";
-import { Trophy, Zap, Puzzle, Heart, Play, Gamepad2, Lock } from "lucide-react";
+import { Trophy, Zap, Puzzle, Heart, Play, Gamepad2, Type } from "lucide-react";
 import AppShell from "@/components/edura/AppShell";
 import { getBestScores } from "@/lib/arcade";
 import millionaireArt from "@/assets/game-millionaire.jpg";
 import blitzArt from "@/assets/game-blitz.jpg";
+import survivalArt from "@/assets/game-survival.jpg";
+import matchArt from "@/assets/game-match.jpg";
+import wordsArt from "@/assets/game-words.jpg";
 
 const GAMES = [
   { to: "/games/millionaire", key: "millionaire", icon: Trophy, art: millionaireArt, title: "Edura Millionaire", tag: "Quiz show", body: "Climb 15 questions. Two safe havens. Three lifelines.", unit: "XP" },
   { to: "/games/blitz", key: "blitz", icon: Zap, art: blitzArt, title: "60-Second Blitz", tag: "Speed run", body: "Beat the clock. Streaks multiply your score up to 4x.", unit: "pts" },
-];
-const SOON = [
-  { icon: Puzzle, title: "Formula Match", body: "Pair formulas & definitions" },
-  { icon: Heart, title: "Survival", body: "3 hearts. Sudden death." },
+  { to: "/games/survival", key: "survival", icon: Heart, art: survivalArt, title: "Survival", tag: "Sudden death", body: "Three hearts. Points climb every 5 right answers.", unit: "pts" },
+  { to: "/games/match", key: "match", icon: Puzzle, art: matchArt, title: "Formula Match", tag: "Puzzle", body: "Pair formulas and definitions against the clock.", unit: "pts" },
+  { to: "/games/words", key: "words", icon: Type, art: wordsArt, title: "Word Buster", tag: "Daily", body: "Unscramble one exam word a day. Hints cost points.", unit: "pts" },
 ];
 
 export default function Arcade() {
@@ -58,21 +60,6 @@ export default function Arcade() {
           ))}
         </div>
 
-        <div>
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">Unlocking soon</p>
-          <div className="grid grid-cols-2 gap-3">
-            {SOON.map((g) => (
-              <div key={g.title} className="relative flex items-center gap-3 rounded-2xl border-2 border-dashed p-4">
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-muted text-muted-foreground"><g.icon className="h-5 w-5" /></span>
-                <div className="min-w-0">
-                  <p className="font-display text-sm font-bold">{g.title}</p>
-                  <p className="truncate text-xs text-muted-foreground">{g.body}</p>
-                </div>
-                <Lock className="absolute right-3 top-3 h-3.5 w-3.5 text-muted-foreground" />
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </AppShell>
   );
