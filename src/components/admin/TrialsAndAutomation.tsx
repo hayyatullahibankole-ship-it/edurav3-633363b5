@@ -6,10 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Gift, Bell, Play, Loader2, RefreshCw } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { isManualTrialDayOption, normalizeSignupTrialDays, type ManualTrialDays, type SignupTrialDays } from "@/lib/signupTrialSettings";
 
 interface Rule {
   id: string;
@@ -26,13 +28,13 @@ interface Rule {
 
 export default function TrialsAndAutomation() {
   const [rules, setRules] = useState<Rule[]>([]);
-  const [trialDays, setTrialDays] = useState("30");
+  const [trialDays, setTrialDays] = useState<SignupTrialDays>(0);
   const [masterOn, setMasterOn] = useState(true);
   const [stats, setStats] = useState({ active: 0, endingSoon: 0, expired: 0, paid: 0 });
   const [loading, setLoading] = useState(true);
   const [running, setRunning] = useState<string | null>(null);
   const [grantEmail, setGrantEmail] = useState("");
-  const [grantDays, setGrantDays] = useState("30");
+  const [grantDays, setGrantDays] = useState<ManualTrialDays>("3");
   const [granting, setGranting] = useState(false);
 
   const load = async () => {
@@ -43,7 +45,7 @@ export default function TrialsAndAutomation() {
     ]);
     setRules((rulesRes.data as Rule[]) || []);
     const s = Object.fromEntries((settingsRes.data || []).map((r: any) => [r.key, r.value]));
-    setTrialDays(s.trial_days || "30");
+    setTrialDays(normalizeSignupTrialDays(s.trial_days));
     setMasterOn(s.notifications_enabled !== "false");
 
     const today = new Date().toISOString().slice(0, 10);
@@ -101,8 +103,9 @@ export default function TrialsAndAutomation() {
 
   const grantTrial = async () => {
     if (!grantEmail.trim()) return;
+    if (!isManualTrialDayOption(grantDays)) return toast.error("Choose either 3 or 7 days");
     setGranting(true);
-    const days = parseInt(grantDays) || 30;
+    const days = Number(grantDays);
     const expiry = new Date(Date.now() + days * 86400000).toISOString().slice(0, 10);
     const { error, count } = await supabase
       .from("users")
@@ -153,23 +156,22 @@ export default function TrialsAndAutomation() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Trial length</CardTitle>
-              <CardDescription>Applies to every new account from now on.</CardDescription>
+              <CardTitle className="text-base">New account free access</CardTitle>
+              <CardDescription>Choose no automatic access, 3 days, or 7 days. Existing access is unchanged.</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-wrap items-end gap-3">
-              <div className="space-y-1.5">
-                <Label htmlFor="trial-days">Days</Label>
-                <Input
-                  id="trial-days"
-                  type="number"
-                  min={0}
-                  max={365}
-                  value={trialDays}
-                  onChange={(e) => setTrialDays(e.target.value)}
-                  className="w-28"
-                />
+              <div className="w-56 space-y-1.5">
+                <Label htmlFor="trial-days">Free access duration</Label>
+                <Select value={String(trialDays)} onValueChange={(value) => setTrialDays(normalizeSignupTrialDays(value))}>
+                  <SelectTrigger id="trial-days"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">No automatic access</SelectItem>
+                    <SelectItem value="3">3 days</SelectItem>
+                    <SelectItem value="7">7 days</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              <Button onClick={() => saveSetting("trial_days", String(parseInt(trialDays) || 30))}>
+              <Button onClick={() => saveSetting("trial_days", String(trialDays))}>
                 Save
               </Button>
             </CardContent>
@@ -191,16 +193,17 @@ export default function TrialsAndAutomation() {
                   onChange={(e) => setGrantEmail(e.target.value)}
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="w-36 space-y-1.5">
                 <Label htmlFor="grant-days">Days</Label>
-                <Input
-                  id="grant-days"
-                  type="number"
-                  min={1}
-                  value={grantDays}
-                  onChange={(e) => setGrantDays(e.target.value)}
-                  className="w-24"
-                />
+                <Select value={grantDays} onValueChange={(value) => {
+                  if (isManualTrialDayOption(value)) setGrantDays(value);
+                }}>
+                  <SelectTrigger id="grant-days"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="3">3 days</SelectItem>
+                    <SelectItem value="7">7 days</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <Button onClick={grantTrial} disabled={granting}>
                 {granting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Grant
