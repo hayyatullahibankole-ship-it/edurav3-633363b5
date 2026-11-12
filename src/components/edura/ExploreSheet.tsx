@@ -83,7 +83,7 @@ const groups: {
   {
     title: "Learn",
     items: [
-      { label: "Study Hub", description: "Lessons & topics", icon: BookOpen, path: "/study-hub" },
+      { label: "Classroom", description: "Lessons & topics", icon: BookOpen, path: "/study-hub" },
       { label: "Resources", description: "Past questions & books", icon: FolderOpen, path: "/resources" },
       { label: "Ebook Library", description: "Read exclusive books", icon: Library, path: "/ebooks" },
       { label: "AI Tutor", description: "Ask anything, get answers", icon: Bot, path: "/ai-tutor" },

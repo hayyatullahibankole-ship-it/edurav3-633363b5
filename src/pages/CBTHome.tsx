@@ -16,6 +16,7 @@ import {
   Layers,
   Play,
   Gamepad2,
+  Bookmark,
 } from "lucide-react";
 import AppShell from "@/components/edura/AppShell";
 import { ListRow, Panel, EmptyState } from "@/components/edura/tiles";
@@ -32,12 +33,13 @@ import ExamBadge from "@/components/edura/ExamBadge";
 
 
 const PRACTICE_TOOLS = [
-  { to: "/study-hub", icon: Target, title: "Study hub" },
+  { to: "/study-hub", icon: Target, title: "Classroom" },
   { to: "/resources", icon: FileText, title: "Past questions" },
   { to: "/ebooks", icon: BookOpen, title: "Ebooks" },
   { to: "/ai-tutor", icon: Bot, title: "Ask a tutor" },
   { to: "/decks", icon: Layers, title: "Study decks" },
   { to: "/games", icon: Gamepad2, title: "Games" },
+  { to: "/bookmarks", icon: Bookmark, title: "Bookmarks" },
   { to: "/challenge-arena", icon: Sword, title: "Challenges" },
   { to: "/leaderboard", icon: Trophy, title: "Leaderboard" },
   { to: "/performance-report", icon: Award, title: "My report" },

@@ -30,7 +30,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const navItems = [
   { title: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
-  { title: "Study Hub", path: "/study-hub", icon: BookOpen },
+  { title: "Classroom", path: "/study-hub", icon: BookOpen },
   { title: "Challenge Arena", path: "/challenge-arena", icon: Sword },
   { title: "Study Planner", path: "/study-planner", icon: Calendar },
   { title: "Resources", path: "/resources", icon: FolderOpen },

@@ -4197,6 +4197,42 @@ export type Database = {
           },
         ]
       }
+      question_bookmarks: {
+        Row: {
+          correct_index: number | null
+          created_at: string
+          explanation: string | null
+          id: string
+          options: Json
+          question_id: string
+          question_text: string
+          subject: string | null
+          user_id: string
+        }
+        Insert: {
+          correct_index?: number | null
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          options?: Json
+          question_id: string
+          question_text: string
+          subject?: string | null
+          user_id: string
+        }
+        Update: {
+          correct_index?: number | null
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          options?: Json
+          question_id?: string
+          question_text?: string
+          subject?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       questions: {
         Row: {
           correct_answer: string

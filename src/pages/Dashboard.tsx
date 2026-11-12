@@ -21,6 +21,8 @@ import OnboardingTour from "@/components/OnboardingTour";
 import StreakHero from "@/components/edura/gamify/StreakHero";
 import TrialStatusCard from "@/components/edura/TrialStatusCard";
 import LatestNewsBanner from "@/components/edura/LatestNewsBanner";
+import DailyQuoteCard from "@/components/edura/DailyQuoteCard";
+import TopScorersBanner from "@/components/edura/TopScorersBanner";
 
 import BadgeStrip from "@/components/edura/gamify/BadgeStrip";
 import CountUp from "@/components/edura/gamify/CountUp";
@@ -228,6 +230,10 @@ const Dashboard = () => {
           <LatestNewsBanner />
 
           <TrialStatusCard />
+
+          <DailyQuoteCard />
+
+          <TopScorersBanner />
 
           <PrimaryActionCard
 

@@ -16,7 +16,7 @@ export const DashboardLayout = ({ children, schoolInfo }: DashboardLayoutProps) 
   const title = pathname.startsWith("/forum")
     ? "Student Forum"
     : pathname.startsWith("/study-hub")
-      ? "Study Hub"
+      ? "Classroom"
       : pathname.startsWith("/challenge")
         ? "Challenge Arena"
         : pathname.startsWith("/resources")

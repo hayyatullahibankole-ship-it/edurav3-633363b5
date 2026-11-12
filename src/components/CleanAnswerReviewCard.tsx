@@ -5,6 +5,7 @@ import { CleanQuestionReview } from '@/hooks/useCleanAnswerReview';
 import { MathRenderer } from '@/components/ui/math-renderer';
 import { QuestionMedia, OptionMedia } from '@/components/questions/QuestionMedia';
 import { cn } from '@/lib/utils';
+import { BookmarkButton } from '@/components/BookmarkButton';
 
 interface CleanAnswerReviewCardProps {
   question: CleanQuestionReview;
@@ -32,6 +33,7 @@ export const CleanAnswerReviewCard = ({ question, index }: CleanAnswerReviewCard
             </CardTitle>
             <div className="flex items-center gap-2 mt-2">
               <Badge variant="outline">{question.subject}</Badge>
+              <BookmarkButton q={{ questionId: question.id, subject: question.subject, questionText: question.questionText, options: question.options, correctIndex: question.correctAnswerIndex, explanation: question.explanation }} />
               <div className="flex items-center text-sm text-muted-foreground">
                 <Clock className="w-4 h-4 mr-1" />
                 {Math.floor(question.timeSpentSeconds / 60)}:{(question.timeSpentSeconds % 60).toString().padStart(2, '0')}
