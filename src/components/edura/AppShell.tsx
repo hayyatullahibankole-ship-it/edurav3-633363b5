@@ -20,6 +20,7 @@ import {
   LogOut,
   type LucideIcon,
   Bookmark,
+  Target,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -82,6 +83,7 @@ const CAMPUS_NAV: ShellNavItem[] = [
 /** Extra destinations that only appear in the desktop rail. */
 const DESKTOP_EXTRAS: Record<ShellSide, ShellNavItem[]> = {
   cbt: [
+    { to: "/topic-practice", label: "Topic practice", icon: Target },
     { to: "/study-hub", label: "Classroom", icon: BookOpen },
     { to: "/ebooks", label: "Ebooks", icon: Library },
     { to: "/games", label: "Games", icon: Gamepad2 },

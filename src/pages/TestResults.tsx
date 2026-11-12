@@ -1,5 +1,5 @@
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCleanResults } from '@/hooks/useCleanResults';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,8 @@ import {
   XCircle, 
   Clock, 
   FileText,
-  Download
+  Download,
+  Target,
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -25,6 +26,33 @@ export default function TestResults() {
   const { toast } = useToast();
   const { results, loading } = useCleanResults(attemptId);
   const [downloading, setDownloading] = useState(false);
+  const [weakTopic, setWeakTopic] = useState<{
+    subject_id: string;
+    subject_name: string;
+    topic_name: string;
+    accuracy: number;
+    exam_body: string | null;
+    total_questions: number;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!attemptId) return;
+    let active = true;
+    supabase.rpc('get_weak_topic_for_attempt', { target_attempt_id: attemptId })
+      .then(({ data, error }) => {
+        if (error) throw error;
+        if (active) setWeakTopic(data?.[0] ?? null);
+      })
+      .catch((error: unknown) => {
+        console.error('Failed to load weak topic recommendation:', error);
+        if (active) toast({
+          title: 'Topic recommendation unavailable',
+          description: error instanceof Error ? error.message : 'Could not load a topic to revise.',
+          variant: 'destructive'
+        });
+      });
+    return () => { active = false; };
+  }, [attemptId, toast]);
 
   const handleDownloadPDF = async () => {
     if (!results || !attemptId) return;
@@ -253,6 +281,26 @@ export default function TestResults() {
                   </div>
                 </div>
               ))}
+              {weakTopic && (
+                <div className="mt-5 flex flex-col gap-3 rounded-xl border border-primary/20 bg-primary/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-sm font-semibold">Topic to revise: {weakTopic.topic_name}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {weakTopic.subject_name} · {weakTopic.accuracy}% accuracy across {weakTopic.total_questions ?? 0} answered questions
+                    </p>
+                  </div>
+                  {weakTopic.exam_body && (
+                    <Button
+                      onClick={() => navigate(
+                        `/topic-practice?exam=${weakTopic.exam_body}&subject=${weakTopic.subject_id}&topic=${encodeURIComponent(weakTopic.topic_name)}`
+                      )}
+                      className="gap-2"
+                    >
+                      <Target className="h-4 w-4" /> Revise weak topic
+                    </Button>
+                  )}
+                </div>
+              )}
             </CardContent>
           </Card>
         )}

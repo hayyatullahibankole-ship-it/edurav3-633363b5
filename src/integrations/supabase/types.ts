@@ -3159,7 +3159,7 @@ export type Database = {
         Row: {
           created_at: string | null
           edura_subject_id: string | null
-          exam_body: string
+          exam_body: string | null
           external_subject_code: string | null
           external_subject_name: string
           id: string
@@ -6637,6 +6637,20 @@ export type Database = {
         }
         Returns: string
       }
+      create_topic_practice_session: {
+        Args: {
+          target_exam_body: string
+          target_mode: string
+          target_question_count: number
+          target_subject_id: string
+          target_topic_name: string
+        }
+        Returns: {
+          created_at: string
+          session_id: string
+          time_limit_seconds: number
+        }[]
+      }
       admin_delete_all_questions: { Args: never; Returns: Json }
       apply_answer_normalization: {
         Args: never
@@ -6775,6 +6789,77 @@ export type Database = {
           subject_name: string
           topic_name: string
           weakness_score: number
+        }[]
+      }
+      finish_topic_practice: {
+        Args: { target_session_id: string }
+        Returns: Json
+      }
+      get_topic_practice_library: {
+        Args: { target_exam_body: string }
+        Returns: {
+          attempted_questions: number
+          correct_questions: number
+          question_count: number
+          subject_id: string
+          subject_name: string
+          topic_name: string
+        }[]
+      }
+      get_topic_practice_questions: {
+        Args: { target_session_id: string }
+        Returns: {
+          correct_answer: Json
+          explanation: string
+          id: string
+          media_urls: Json
+          option_media: Json
+          options: Json
+          question_text: string
+          saved_answer: Json
+          saved_is_correct: boolean | null
+          type: Database["public"]["Enums"]["question_type"]
+        }[]
+      }
+      get_topic_practice_review: {
+        Args: { target_session_id: string }
+        Returns: {
+          answer: Json
+          correct_answer: Json
+          explanation: string | null
+          id: string
+          is_correct: boolean | null
+          media_urls: Json
+          option_media: Json
+          options: Json
+          question_text: string
+        }[]
+      }
+      get_topic_practice_session: {
+        Args: { target_session_id: string }
+        Returns: {
+          created_at: string
+          exam_body: string | null
+          mode: string
+          question_count: number
+          session_id: string
+          subject_id: string
+          subject_name: string
+          submitted_at: string
+          time_limit_seconds: number
+          topic_name: string
+        }[]
+      }
+      get_weak_topic_for_attempt: {
+        Args: { target_attempt_id: string }
+        Returns: {
+          accuracy: number
+          correct_questions: number
+          exam_body: string | null
+          subject_id: string
+          subject_name: string
+          topic_name: string
+          total_questions: number
         }[]
       }
       get_admin_proctoring_data: {
@@ -7010,6 +7095,14 @@ export type Database = {
           time_limit_seconds: number
           type: Database["public"]["Enums"]["question_type"]
         }[]
+      }
+      submit_topic_practice_answer: {
+        Args: {
+          submitted_answer: Json
+          target_question_id: string
+          target_session_id: string
+        }
+        Returns: Json
       }
       get_subject_question_counts: {
         Args: never

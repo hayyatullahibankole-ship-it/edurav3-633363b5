@@ -73,6 +73,7 @@ const PerformanceReport = lazy(() => import("@/pages/PerformanceReport"));
 const LessonQuiz = lazy(() => import("@/pages/LessonQuiz"));
 
 const CBTHome = lazy(() => import("@/pages/CBTHome"));
+const TopicPractice = lazy(() => import("@/pages/TopicPractice"));
 const Leaderboard = lazy(() => import("@/pages/Leaderboard"));
 
 const Settings = lazy(() => import("@/pages/Settings"));
@@ -266,6 +267,11 @@ const EduraRoutes = () => {
       <Route path="/cbt" element={
         <ProtectedRoute>
           <CoreOnly><CBTHome /></CoreOnly>
+        </ProtectedRoute>
+      } />
+      <Route path="/topic-practice" element={
+        <ProtectedRoute>
+          <CoreOnly><TopicPractice /></CoreOnly>
         </ProtectedRoute>
       } />
       <Route path="/leaderboard" element={

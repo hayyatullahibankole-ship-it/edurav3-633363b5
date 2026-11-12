@@ -27,6 +27,7 @@ import {
   Zap,
   Gift,
   CreditCard,
+  Target,
 } from "lucide-react";
 
 const tests: { examType: "jamb" | "waec" | "neco" | "post-utme"; label: string; icon: React.ElementType }[] = [
@@ -83,6 +84,7 @@ const groups: {
   {
     title: "Learn",
     items: [
+      { label: "Topic practice", description: "Drill a subject topic", icon: Target, path: "/topic-practice" },
       { label: "Classroom", description: "Lessons & topics", icon: BookOpen, path: "/study-hub" },
       { label: "Resources", description: "Past questions & books", icon: FolderOpen, path: "/resources" },
       { label: "Ebook Library", description: "Read exclusive books", icon: Library, path: "/ebooks" },
