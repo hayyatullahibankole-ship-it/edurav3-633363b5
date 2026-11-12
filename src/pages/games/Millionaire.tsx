@@ -78,30 +78,30 @@ export default function Millionaire() {
       {phase === "loading" && <div className="grid place-items-center py-20"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>}
 
       {phase === "play" && current && (
-        <div className="grid gap-6 lg:grid-cols-[1fr_220px]">
+        <div className="grid gap-6 rounded-3xl bg-ink p-4 text-ink-foreground sm:p-6 lg:grid-cols-[1fr_220px]">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <p className="font-display text-sm font-bold">Question {step + 1} of 15 · for {fmt(MILLIONAIRE_LADDER[step])} XP</p>
               {doubleActive && <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold">Double try on</span>}
             </div>
             <div className="flex flex-wrap gap-2">
-              <Button variant="outline" size="sm" disabled={used.fifty || correct !== null || checking} onClick={useFifty}><Divide className="mr-1 h-4 w-4" />50/50</Button>
-              <Button variant="outline" size="sm" disabled={used.swap || correct !== null || checking || !pool.length} onClick={useSwap}><Shuffle className="mr-1 h-4 w-4" />Swap question</Button>
-              <Button variant="outline" size="sm" disabled={used.double || correct !== null || checking} onClick={useDouble}><Repeat className="mr-1 h-4 w-4" />Double try</Button>
+              <Button variant="secondary" size="sm" disabled={used.fifty || correct !== null || checking} onClick={useFifty}><Divide className="mr-1 h-4 w-4" />50/50</Button>
+              <Button variant="secondary" size="sm" disabled={used.swap || correct !== null || checking || !pool.length} onClick={useSwap}><Shuffle className="mr-1 h-4 w-4" />Swap question</Button>
+              <Button variant="secondary" size="sm" disabled={used.double || correct !== null || checking} onClick={useDouble}><Repeat className="mr-1 h-4 w-4" />Double try</Button>
             </div>
             <GameQuestionCard question={current} hidden={hidden} picked={picked} correct={correct} disabled={checking} onPick={pick} />
             <div className="flex flex-wrap gap-2">
               {answeredRight && step < 15 && <Button size="lg" onClick={next}>Next question</Button>}
-              {correct === null && step > 0 && <Button variant="ghost" onClick={() => end(millionaireXpOnWalkAway(step))}>Walk away with {fmt(MILLIONAIRE_LADDER[step - 1])} XP</Button>}
+              {correct === null && step > 0 && <Button variant="secondary" onClick={() => end(millionaireXpOnWalkAway(step))}>Walk away with {fmt(MILLIONAIRE_LADDER[step - 1])} XP</Button>}
               {checking && <Loader2 className="h-5 w-5 animate-spin text-primary" />}
             </div>
           </div>
-          <ol className="flex flex-col-reverse gap-1 rounded-2xl border bg-card p-3 text-sm">
+          <ol className="flex flex-col-reverse gap-1 rounded-2xl bg-ink-soft p-3 text-sm">
             {MILLIONAIRE_LADDER.map((xp, i) => (
               <li key={xp} className={cn("flex justify-between rounded-lg px-3 py-1.5",
                 i === step && "bg-primary text-primary-foreground font-bold",
-                i < step && "text-muted-foreground",
-                SAFE_HAVEN_STEPS.includes(i + 1) && i !== step && "font-bold text-primary")}>
+                i < step && "opacity-50",
+                SAFE_HAVEN_STEPS.includes(i + 1) && i !== step && "font-bold text-gold")}>
                 <span>{i + 1}</span><span>{fmt(xp)}</span>
               </li>
             ))}
@@ -110,11 +110,11 @@ export default function Millionaire() {
       )}
 
       {phase === "over" && (
-        <div className="mx-auto max-w-md space-y-4 rounded-2xl border bg-card p-8 text-center">
-          <Trophy className="mx-auto h-10 w-10 text-primary" />
+        <div className="mx-auto max-w-md space-y-4 rounded-3xl border-2 border-ink bg-ink p-8 text-center text-ink-foreground shadow-[0_8px_0_0_hsl(var(--primary))]">
+          <Trophy className="mx-auto h-10 w-10 text-gold" />
           <h2 className="font-display text-2xl font-bold">{step === 15 ? "Champion!" : "Game over"}</h2>
-          <p className="text-muted-foreground">You answered {step} correctly and leave with</p>
-          <p className="font-display text-4xl font-extrabold text-primary">{fmt(finalXp)} XP</p>
+          <p className="text-ink-foreground/70">You answered {step} correctly and leave with</p>
+          <p className="font-display text-5xl font-extrabold text-gold">{fmt(finalXp)} XP</p>
           {newBest && <p className="text-sm font-semibold">New personal best!</p>}
           <div className="flex justify-center gap-2">
             <Button onClick={() => setPhase("setup")}>Play again</Button>

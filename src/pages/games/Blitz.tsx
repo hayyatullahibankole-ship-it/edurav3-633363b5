@@ -68,17 +68,17 @@ export default function Blitz() {
       {phase === "loading" && <div className="grid place-items-center py-20"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>}
 
       {phase === "play" && queue[0] && (
-        <div className="space-y-4">
+        <div className="space-y-4 rounded-3xl bg-ink p-4 text-ink-foreground sm:p-6">
           <div className="grid grid-cols-3 gap-2">
-            <div className={cn("rounded-2xl border bg-card p-3 text-center", state.secondsLeft <= 10 && "border-destructive")}>
-              <Timer className="mx-auto h-4 w-4 text-muted-foreground" />
+            <div className={cn("rounded-2xl border-2 border-ink-soft bg-ink-soft p-3 text-center", state.secondsLeft <= 10 && "border-destructive")}>
+              <Timer className="mx-auto h-4 w-4 text-gold" />
               <p className={cn("font-display text-3xl font-extrabold tabular-nums", state.secondsLeft <= 10 && "text-destructive")}>{state.secondsLeft}</p>
             </div>
-            <div className="rounded-2xl border bg-card p-3 text-center">
+            <div className="rounded-2xl border-2 border-ink-soft bg-ink-soft p-3 text-center">
               <p className="text-xs text-muted-foreground">Score</p>
               <p className="font-display text-3xl font-extrabold tabular-nums">{state.score}</p>
             </div>
-            <div className="rounded-2xl border bg-card p-3 text-center">
+            <div className="rounded-2xl border-2 border-ink-soft bg-ink-soft p-3 text-center">
               <Zap className={cn("mx-auto h-4 w-4", mult > 1 ? "text-primary" : "text-muted-foreground")} />
               <p className="font-display text-3xl font-extrabold">{mult}x</p>
             </div>
@@ -88,11 +88,11 @@ export default function Blitz() {
       )}
 
       {phase === "over" && (
-        <div className="mx-auto max-w-md space-y-4 rounded-2xl border bg-card p-8 text-center">
-          <Zap className="mx-auto h-10 w-10 text-primary" />
+        <div className="mx-auto max-w-md space-y-4 rounded-3xl border-2 border-ink bg-ink p-8 text-center text-ink-foreground shadow-[0_8px_0_0_hsl(var(--primary))]">
+          <Zap className="mx-auto h-10 w-10 text-gold" />
           <h2 className="font-display text-2xl font-bold">Time's up!</h2>
-          <p className="font-display text-4xl font-extrabold text-primary">{state.score} pts</p>
-          <p className="text-muted-foreground">{answered.right} of {answered.total} correct</p>
+          <p className="font-display text-5xl font-extrabold text-gold">{state.score} pts</p>
+          <p className="text-ink-foreground/70">{answered.right} of {answered.total} correct</p>
           {newBest && <p className="text-sm font-semibold">New personal best!</p>}
           <div className="flex justify-center gap-2">
             <Button onClick={() => start(idsRef.current)}>Play again</Button>
