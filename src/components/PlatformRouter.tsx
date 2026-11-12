@@ -51,6 +51,9 @@ const Forum = lazy(() => import("@/pages/Forum"));
 const ForumNewPost = lazy(() => import("@/pages/ForumNewPost"));
 const ForumPost = lazy(() => import("@/pages/ForumPost"));
 const ChallengeArena = lazy(() => import("@/pages/ChallengeArena"));
+const Arcade = lazy(() => import("@/pages/Arcade"));
+const Millionaire = lazy(() => import("@/pages/games/Millionaire"));
+const Blitz = lazy(() => import("@/pages/games/Blitz"));
 const ChallengeDetail = lazy(() => import("@/pages/ChallengeDetail"));
 const ChallengeResults = lazy(() => import("@/pages/ChallengeResults"));
 const SchoolRegistration = lazy(() => import("@/pages/SchoolRegistration"));
@@ -462,6 +465,9 @@ const EduraRoutes = () => {
           <DashboardLayout><ChallengeArena /></DashboardLayout>
         </ProtectedRoute>
       } />
+      <Route path="/games" element={<ProtectedRoute><Arcade /></ProtectedRoute>} />
+      <Route path="/games/millionaire" element={<ProtectedRoute><Millionaire /></ProtectedRoute>} />
+      <Route path="/games/blitz" element={<ProtectedRoute><Blitz /></ProtectedRoute>} />
       <Route path="/battle" element={<Navigate to="/challenge-arena" replace />} />
       <Route path="/challenge/:challengeId" element={
         <ProtectedRoute>

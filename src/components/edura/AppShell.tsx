@@ -4,6 +4,7 @@ import {
   LayoutGrid,
   BookOpen,
   Library,
+  Gamepad2,
   FolderKanban,
   Compass,
   Wallet as WalletIcon,
@@ -82,6 +83,7 @@ const DESKTOP_EXTRAS: Record<ShellSide, ShellNavItem[]> = {
   cbt: [
     { to: "/study-hub", label: "Study hub", icon: BookOpen },
     { to: "/ebooks", label: "Ebooks", icon: Library },
+    { to: "/games", label: "Games", icon: Gamepad2 },
   ],
   services: [
     { to: "/study-hub", label: "Study hub", icon: BookOpen },
