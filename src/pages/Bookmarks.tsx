@@ -37,7 +37,7 @@ export default function Bookmarks() {
         <div className="rounded-3xl border-2 border-dashed p-10 text-center">
           <Bookmark className="mx-auto h-10 w-10 text-muted-foreground" />
           <p className="mt-3 font-display font-bold">No bookmarks yet</p>
-          <p className="text-sm text-muted-foreground">Tap "Bookmark" on any question when reviewing your answers.</p>
+          <p className="text-sm text-muted-foreground">Tap "Bookmark" on any question during a test or when reviewing your answers.</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -65,6 +65,7 @@ export default function Bookmarks() {
                   </li>
                 ))}
               </ul>
+              {shown[r.id] && r.correct_index == null && <p className="rounded-xl bg-muted p-3 text-sm text-muted-foreground">The answer appears here after you finish the test and open its answer review.</p>}
               {shown[r.id] && r.explanation && <div className="rounded-xl bg-muted p-3 text-sm"><MathRenderer content={r.explanation} /></div>}
             </article>
           ))}

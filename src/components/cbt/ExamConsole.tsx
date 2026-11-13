@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MathRenderer } from '@/components/ui/math-renderer';
 import { QuestionMedia, OptionMedia } from '@/components/questions/QuestionMedia';
 import Calculator from '@/components/Calculator';
+import { BookmarkButton } from '@/components/BookmarkButton';
 import { cn } from '@/lib/utils';
 import { CBTQuestion, CBTAnswers } from '@/hooks/useCBTExam';
 import { useProctoring, ProctoringMode } from '@/components/cbt/useProctoring';
@@ -360,6 +361,16 @@ export const ExamConsole: React.FC<ExamConsoleProps> = ({
                 Question {positionInSubject} of {activeIndices.length}
               </p>
               <div className="flex items-center gap-2">
+                <BookmarkButton
+                  compact
+                  className="h-8 rounded-md px-3"
+                  q={{
+                    questionId: currentQuestion.id,
+                    subject: currentQuestion.subject,
+                    questionText: currentQuestion.questionText,
+                    options: currentQuestion.options.map(o => (typeof o === 'string' ? o : String((o as any)?.text ?? o))),
+                  }}
+                />
                 <Button
                   variant={flagged[currentQuestion.id] ? 'default' : 'outline'}
                   size="sm"

@@ -10,15 +10,22 @@ export interface BookmarkSnapshot {
   options: string[]; correctIndex?: number | null; explanation?: string | null;
 }
 
-export function BookmarkButton({ q, className }: { q: BookmarkSnapshot; className?: string }) {
+export function BookmarkButton({ q, className, compact }: { q: BookmarkSnapshot; className?: string; compact?: boolean }) {
   const { user } = useAuth();
   const [saved, setSaved] = useState(false);
   const [busy, setBusy] = useState(false);
   useEffect(() => {
     if (!user) return;
     supabase.from("question_bookmarks").select("id").eq("user_id", user.id).eq("question_id", q.questionId).maybeSingle()
-      .then(({ data }) => setSaved(!!data));
-  }, [user, q.questionId]);
+      .then(({ data }) => {
+        setSaved(!!data);
+        // Saved during a test (no answer yet)? Fill in the answer once it's known on the review screen.
+        if (data && q.correctIndex != null) {
+          supabase.from("question_bookmarks").update({ correct_index: q.correctIndex, explanation: q.explanation ?? null })
+            .eq("id", data.id).is("correct_index", null).then(() => {});
+        }
+      });
+  }, [user, q.questionId, q.correctIndex, q.explanation]);
   if (!user) return null;
   const toggle = async () => {
     setBusy(true);
@@ -38,7 +45,7 @@ export function BookmarkButton({ q, className }: { q: BookmarkSnapshot; classNam
     <button type="button" onClick={toggle} disabled={busy} aria-pressed={saved} aria-label={saved ? "Remove bookmark" : "Bookmark question"}
       className={cn("inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold transition-colors",
         saved ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background hover:bg-muted", className)}>
-      <Bookmark className={cn("h-3.5 w-3.5", saved && "fill-current")} />{saved ? "Saved" : "Bookmark"}
+      <Bookmark className={cn("h-3.5 w-3.5", saved && "fill-current")} />{compact ? <span className="hidden sm:inline">{saved ? "Saved" : "Bookmark"}</span> : (saved ? "Saved" : "Bookmark")}
     </button>
   );
 }
