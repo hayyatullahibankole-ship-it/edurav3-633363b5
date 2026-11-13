@@ -38,7 +38,7 @@ export default function TestResults() {
   useEffect(() => {
     if (!attemptId) return;
     let active = true;
-    supabase.rpc('get_weak_topic_for_attempt', { target_attempt_id: attemptId })
+    Promise.resolve(supabase.rpc('get_weak_topic_for_attempt', { target_attempt_id: attemptId }))
       .then(({ data, error }) => {
         if (error) throw error;
         if (active) setWeakTopic(data?.[0] ?? null);

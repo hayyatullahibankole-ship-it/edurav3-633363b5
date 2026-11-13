@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft,
@@ -34,13 +35,13 @@ import ExamBadge from "@/components/edura/ExamBadge";
 
 const PRACTICE_TOOLS = [
   { to: "/topic-practice", icon: Target, title: "Topic drills" },
-  { to: "/study-hub", icon: Target, title: "Classroom" },
+  { to: "/bookmarks", icon: Bookmark, title: "Bookmarks" },
+  { to: "/games", icon: Gamepad2, title: "Games" },
+  { to: "/study-hub", icon: GraduationCap, title: "Classroom" },
   { to: "/resources", icon: FileText, title: "Past questions" },
   { to: "/ebooks", icon: BookOpen, title: "Ebooks" },
   { to: "/ai-tutor", icon: Bot, title: "Ask a tutor" },
   { to: "/decks", icon: Layers, title: "Study decks" },
-  { to: "/games", icon: Gamepad2, title: "Games" },
-  { to: "/bookmarks", icon: Bookmark, title: "Bookmarks" },
   { to: "/challenge-arena", icon: Sword, title: "Challenges" },
   { to: "/leaderboard", icon: Trophy, title: "Leaderboard" },
   { to: "/performance-report", icon: Award, title: "My report" },
@@ -64,6 +65,8 @@ const CBTHome = () => {
   const isMobileBrowser = isMobile && !isInstalledApp;
 
   const [showMockResult, setShowMockResult] = useState(false);
+  const [showAllTools, setShowAllTools] = useState(false);
+  const visibleTools = showAllTools ? PRACTICE_TOOLS : PRACTICE_TOOLS.slice(0, 7);
   const [showInstallModal, setShowInstallModal] = useState(false);
   const [blockedFeature, setBlockedFeature] = useState("");
 
@@ -122,12 +125,12 @@ const CBTHome = () => {
           <div className="mb-2 flex items-center justify-between">
             <h2 className="font-display text-[15px] font-bold">Practice tools</h2>
           </div>
-          <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-5 sm:overflow-visible sm:px-0 lg:grid-cols-9">
-            {PRACTICE_TOOLS.map((tool) => (
+          <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 lg:grid-cols-8">
+            {visibleTools.map((tool) => (
               <Link
                 key={tool.to}
                 to={tool.to}
-                className="press flex w-[5.5rem] shrink-0 flex-col items-center gap-1.5 rounded-2xl border bg-card px-2 py-3 text-center transition-colors hover:border-primary/40 sm:w-auto"
+                className="press flex flex-col items-center gap-1.5 rounded-2xl border bg-card px-1 py-3 text-center transition-colors hover:border-primary/40"
               >
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <tool.icon className="h-5 w-5" strokeWidth={2.2} />
@@ -135,6 +138,17 @@ const CBTHome = () => {
                 <span className="text-[11px] font-semibold leading-tight">{tool.title}</span>
               </Link>
             ))}
+            <button
+              type="button"
+              onClick={() => setShowAllTools((v) => !v)}
+              aria-expanded={showAllTools}
+              className="press flex flex-col items-center gap-1.5 rounded-2xl border border-dashed bg-card px-1 py-3 text-center transition-colors hover:border-primary/40"
+            >
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted text-foreground">
+                <ChevronDown className={`h-5 w-5 transition-transform ${showAllTools ? "rotate-180" : ""}`} strokeWidth={2.2} />
+              </span>
+              <span className="text-[11px] font-semibold leading-tight">{showAllTools ? "Less" : `More (${PRACTICE_TOOLS.length - 7})`}</span>
+            </button>
           </div>
         </section>
 
