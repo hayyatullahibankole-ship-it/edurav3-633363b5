@@ -4,12 +4,15 @@ import { quoteForDate } from "@/lib/dailyQuotes";
 export default function DailyQuoteCard() {
   const q = quoteForDate(new Date());
   return (
-    <figure className="relative flex items-center gap-3 overflow-hidden rounded-2xl border-2 border-ink bg-ink p-3 text-ink-foreground shadow-[0_3px_0_0_hsl(var(--primary))]">
-      <QuoteIcon aria-hidden className="h-5 w-5 shrink-0 text-gold" />
+    <figure className="relative flex h-full gap-3 overflow-hidden rounded-2xl border bg-card p-4 shadow-sm">
+      <span aria-hidden className="absolute inset-y-0 left-0 w-1 bg-primary" />
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+        <QuoteIcon className="h-4 w-4" />
+      </span>
       <div className="min-w-0">
-        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gold">Quote of the day</p>
-        <blockquote className="mt-0.5 line-clamp-2 font-display text-sm font-bold leading-snug">“{q.text}”</blockquote>
-        <figcaption className="mt-1 truncate text-xs text-ink-foreground/70">— {q.author}</figcaption>
+        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">Quote of the day</p>
+        <blockquote className="mt-1 line-clamp-3 font-display text-[15px] font-bold leading-snug text-foreground">“{q.text}”</blockquote>
+        <figcaption className="mt-1.5 truncate text-xs font-medium text-primary">— {q.author}</figcaption>
       </div>
     </figure>
   );
