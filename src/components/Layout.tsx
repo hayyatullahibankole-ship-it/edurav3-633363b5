@@ -43,7 +43,7 @@ const Layout = ({
   const showBottomNav = showMobileNav && !isAuthRoute && !loading;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="edu-pattern min-h-screen bg-background">
       {showNavbar && !(isInstalledApp || isNative) && <Navbar />}
 
       <main className={showNavbar ? "" : "min-h-screen"}>{children}</main>

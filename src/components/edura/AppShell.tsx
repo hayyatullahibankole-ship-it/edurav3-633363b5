@@ -336,7 +336,7 @@ export const AppShell = ({ side, title, subtitle, meta, action, nav, children }:
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="edu-pattern min-h-screen bg-background">
       {/* Desktop rail */}
       <aside className="hidden lg:flex fixed inset-y-0 left-0 w-60 flex-col border-r bg-card">
         <div className="h-16 flex items-center gap-2 px-5 border-b">
