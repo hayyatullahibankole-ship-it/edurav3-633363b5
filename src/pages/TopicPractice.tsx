@@ -171,7 +171,7 @@ const TopicPractice = () => {
   useEffect(() => {
     let active = true;
     setLibraryLoading(true);
-    supabase.rpc("get_topic_practice_library", { target_exam_body: examBody })
+    Promise.resolve(supabase.rpc("get_topic_practice_library", { target_exam_body: examBody }))
       .then(({ data, error }) => {
         if (error) throw error;
         if (!active) return;
@@ -239,7 +239,7 @@ const TopicPractice = () => {
         if (!loadedSession) throw new Error("Practice session not found.");
         if (!active) return;
 
-        setSession(loadedSession);
+        setSession(loadedSession as PracticeSession);
         setQuestions(questionRows ?? []);
         setCurrentIndex(0);
         setAnswers(Object.fromEntries(
