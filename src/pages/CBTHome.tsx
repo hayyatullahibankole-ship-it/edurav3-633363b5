@@ -18,6 +18,7 @@ import {
   Play,
   Gamepad2,
   Bookmark,
+  Compass,
 } from "lucide-react";
 import AppShell from "@/components/edura/AppShell";
 import { ListRow, Panel, EmptyState } from "@/components/edura/tiles";
@@ -37,6 +38,7 @@ const PRACTICE_TOOLS = [
   { to: "/topic-practice", icon: Target, title: "Topic drills" },
   { to: "/bookmarks", icon: Bookmark, title: "Bookmarks" },
   { to: "/games", icon: Gamepad2, title: "Games" },
+  { to: "/admissions", icon: Compass, title: "Course finder" },
   { to: "/study-hub", icon: GraduationCap, title: "Classroom" },
   { to: "/resources", icon: FileText, title: "Past questions" },
   { to: "/ebooks", icon: BookOpen, title: "Ebooks" },

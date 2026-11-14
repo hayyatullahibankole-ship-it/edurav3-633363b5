@@ -55,6 +55,7 @@ const Arcade = lazy(() => import("@/pages/Arcade"));
 const Millionaire = lazy(() => import("@/pages/games/Millionaire"));
 const Blitz = lazy(() => import("@/pages/games/Blitz"));
 const Bookmarks = lazy(() => import("@/pages/Bookmarks"));
+const AdmissionsFinder = lazy(() => import("@/pages/AdmissionsFinder"));
 const Survival = lazy(() => import("@/pages/games/Survival"));
 const FormulaMatch = lazy(() => import("@/pages/games/FormulaMatch"));
 const WordBuster = lazy(() => import("@/pages/games/WordBuster"));
@@ -433,6 +434,8 @@ const EduraRoutes = () => {
       <Route path="/ai-tutor/:threadId" element={
         <ProtectedRoute><AITutor /></ProtectedRoute>
       } />
+      <Route path="/admissions" element={<ProtectedRoute><AdmissionsFinder /></ProtectedRoute>} />
+      <Route path="/course-finder" element={<Navigate to="/admissions" replace />} />
       <Route path="/bookmarks" element={<ProtectedRoute><Bookmarks /></ProtectedRoute>} />
       <Route path="/classroom" element={<Navigate to="/study-hub" replace />} />
       <Route path="/study-hub" element={
